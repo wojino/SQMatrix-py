@@ -123,3 +123,21 @@ class Matrix:
         newMatrix = E * newMatrix
 
         return newMatrix
+
+    def scriptMath(self): # use "from IPython.display import Math" "Math(MatObject.scriptMath())"
+        script = "\\begin{bmatrix} "
+
+        for i in self.iterRange:
+            for j in self.iterRange:
+                script = script + str(self.mat[j][i]) + "&"
+            script += "& "
+        
+        script = script.replace("&&", "\\\\")
+        script = script.rstrip("\\\\ ")
+        script += " \\end{bmatrix}"
+
+        return script
+
+if __name__ == "__main__":
+    a = Matrix(3)
+    a.scriptMath()
