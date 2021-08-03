@@ -149,6 +149,31 @@ class Matrix:
         script += " \\end{bmatrix}"
 
         return script
+    
+    def LUdecomp(self):
+        L = Matrix.identity(self.size)
+        U = Matrix.identity(self.size)
+
+        for k in range(1, self.iterSize):
+            L.mat[k][k] = 1
+
+            for j in range(k, self.iterSize):
+                sum = 0
+
+                for s in range(k):
+                    sum += L.mat[k][s] * U.mat[s][j]
+
+                U.mat[k][j] = self.mat[k][j] - sum
+            
+            for i in range(k+1, self.iterSize):
+                sum = 0
+
+                for s in range(k):
+                    sum += L.mat[i][s] * U.mat[s][k]
+                
+                L.mat[i][k] = (self.mat[i][k] - sum) / U.mat[k][k]
+
+        return (L, U)
 
 if __name__ == "__main__":
     a = Matrix(3)
