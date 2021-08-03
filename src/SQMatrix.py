@@ -5,24 +5,24 @@ import copy
 
 
 class Matrix:
-    def __init__(self, size, list = []):
+    def __init__(self, size, array = []):
         self.size = size
         self.iterRange = range(1, self.size+1)
 
         self.mat = [[0 for col in range(self.size+1)] for row in range(self.size+1)]
 
-        if not list: # make identity matrix
+        if not array: # make identity matrix
             for i in self.iterRange:
                 self.mat[i][i] = 1
 
-        if isinstance(list[0], list):
-            self.mat = list
+        elif isinstance(array[0], list):
+            self.mat = array
 
         else:
             m = 0
             for i in self.iterRange:
                 for j in self.iterRange:
-                    self.mat[i][j] = list[m]
+                    self.mat[i][j] = array[m]
 
     def __str__(self):
         return str(self.mat)
@@ -87,8 +87,8 @@ class Matrix:
 
     # Elementary row operation
     # Row switching transformation: switches all matrix elements on row i with their counterparts on row j. 
-    def rowSwitch(matrix, i, j):
-        newMatrix = copy.deepcopy(matrix)
+    def rowSwitch(self, i, j):
+        newMatrix = copy.deepcopy(self)
 
         E = Matrix(newMatrix.size)
         E.mat[i][i] = E.mat[j][j] = 0
@@ -99,8 +99,8 @@ class Matrix:
         return newMatrix
 
     # Row multifyling transformation: multiplies all elements on row i by m where m is a non-zero scalar.
-    def rowMultifly(matrix, i, m):
-        newMatrix = copy.deepcopy(matrix)
+    def rowMultifly(self, i, m):
+        newMatrix = copy.deepcopy(self)
 
         E = Matrix(newMatrix.size)
         E.mat[i][i] = m
@@ -110,8 +110,8 @@ class Matrix:
         return newMatrix
 
     # Row addition transformation: adds row j multiplied by a scalar m to row i.
-    def rowAdd(matrix, j, m, i):
-        newMatrix = copy.deepcopy(matrix)
+    def rowAdd(self, j, m, i):
+        newMatrix = copy.deepcopy(self)
 
         E = Matrix(newMatrix.size)
         
