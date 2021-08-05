@@ -2,22 +2,25 @@
 # This source code doesn't have exception handling.
 
 import copy
+from fractions import Fraction
 
 
 class Matrix:
     def __init__(self, size, array):
         self.size = size
         self.iterSize = self.size + 1
-        self.mat = [[0 for col in range(self.size+1)] for row in range(self.size+1)]
+        self.mat = [[Fraction(0) for col in range(self.size+1)] for row in range(self.size+1)]
 
         if isinstance(array[0], list):
-            self.mat = array
+            for i in range(1, self.iterSize):
+                for j in range(1, self.iterSize):
+                    self.mat[i][j] = Fraction(array[i][j])
 
         else:
             m = 0
             for i in range(1, self.iterSize):
                 for j in range(1, self.iterSize):
-                    self.mat[i][j] = array[m]
+                    self.mat[i][j] = Fraction(array[m])
                     m += 1
 
     def identity(size: int):
