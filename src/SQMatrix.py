@@ -40,7 +40,12 @@ class Matrix:
         return Matrix(size, array)
 
     def __str__(self):
-        return str(self.mat)
+        list = [[Fraction(0) for col in range(self.size)] for row in range(self.size)]
+
+        for i in range(1, self.iterSize):
+            for j in range(1, self.iterSize):
+                list[i-1][j-1] = self.mat[i][j]
+        return str(list)
 
     # Operator overloading
     def __add__(self, other):
