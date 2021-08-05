@@ -106,8 +106,9 @@ class Matrix:
         return newMatrix
 
     # Elementary row operation
-    # Row switching transformation: switches all matrix elements on row i with their counterparts on row j. 
     def rowSwitch(self, i, j):
+        # Row switching transformation: switches all matrix elements on row i with their counterparts on row j.
+
         newMatrix = copy.deepcopy(self)
 
         E = Matrix.identity(newMatrix.size)
@@ -118,8 +119,9 @@ class Matrix:
 
         return newMatrix
 
-    # Row multifyling transformation: multiplies all elements on row i by m where m is a non-zero scalar.
     def rowMultifly(self, i, m):
+        # Row multifyling transformation: multiplies all elements on row i by m where m is a non-zero scalar.
+
         newMatrix = copy.deepcopy(self)
 
         E = Matrix.identity(newMatrix.size)
@@ -128,9 +130,10 @@ class Matrix:
         newMatrix = E * newMatrix
 
         return newMatrix
-
-    # Row addition transformation: adds row j multiplied by a scalar m to row i.
+ 
     def rowAdd(self, j, m, i):
+        # Row addition transformation: adds row j multiplied by a scalar m to row i.
+
         newMatrix = copy.deepcopy(self)
 
         E = Matrix.identity(newMatrix.size)
@@ -144,7 +147,8 @@ class Matrix:
 
         return newMatrix
 
-    def scriptMath(self): # use "from IPython.display import Math" code: Math(MatObject.scriptMath())
+    def scriptMath(self):
+        # use "from IPython.display import Math" code: Math(MatObject.scriptMath())
         script = "\\begin{bmatrix} "
 
         for i in range(1, self.iterSize):
