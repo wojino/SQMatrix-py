@@ -6,7 +6,7 @@ from fractions import Fraction
 
 
 class Matrix:
-    def __init__(self, size, array):
+    def __init__(self, size: int, array):
         self.size = size
         self.iterSize = self.size + 1
         self.mat = [[Fraction(0) for col in range(self.size+1)] for row in range(self.size+1)]
@@ -23,6 +23,29 @@ class Matrix:
                     self.mat[i][j] = Fraction(array[m])
                     m += 1
 
+    def __str__(self):
+        list = [[Fraction(0) for col in range(self.size)] for row in range(self.size)]
+
+        for i in range(1, self.iterSize):
+            for j in range(1, self.iterSize):
+                list[i-1][j-1] = self.mat[i][j]
+        return str(list)
+    
+    def show(self):
+        # use "from IPython.display import Math" code: Math(MatObject.scriptMath())
+        script = "\\begin{bmatrix} "
+
+        for i in range(1, self.iterSize):
+            for j in range(1, self.iterSize):
+                script = script + str(self.mat[j][i]) + "&"
+            script += "& "
+        
+        script = script.replace("&&", "\\\\")
+        script = script.rstrip("\\\\ ")
+        script += " \\end{bmatrix}"
+
+        return script
+
     def identity(size: int):
         array = [[0 for col in range(size+1)] for row in range(size+1)]
 
@@ -38,14 +61,6 @@ class Matrix:
         array = [[0 for col in range(size+1)] for row in range(size+1)]
 
         return Matrix(size, array)
-
-    def __str__(self):
-        list = [[Fraction(0) for col in range(self.size)] for row in range(self.size)]
-
-        for i in range(1, self.iterSize):
-            for j in range(1, self.iterSize):
-                list[i-1][j-1] = self.mat[i][j]
-        return str(list)
 
     # Operator overloading
     def __add__(self, other):
@@ -105,6 +120,11 @@ class Matrix:
         
         return newMatrix
 
+    def __eq__(self, other):
+        return self.mat == other.mat
+
+    def __ne__(self, other):
+        return self.mat != other.mat
     # Elementary row operation
     def rowSwitch(self, i, j):
         # Row switching transformation: switches all matrix elements on row i with their counterparts on row j.
@@ -170,45 +190,72 @@ class Matrix:
 
         return newMatrix
     
-    def scriptMath(self):
-        # use "from IPython.display import Math" code: Math(MatObject.scriptMath())
-        script = "\\begin{bmatrix} "
+    def t(self):
+        newMatrix = Matrix.zero(self.size)
 
-        for i in range(1, self.iterSize):
-            for j in range(1, self.iterSize):
-                script = script + str(self.mat[j][i]) + "&"
-            script += "& "
+        for i in range(1, newMatrix.iterSize):
+            for j in range(1, newMatrix.iterSize):
+                newMatrix.mat[i][j] = self.mat[j][i]
         
-        script = script.replace("&&", "\\\\")
-        script = script.rstrip("\\\\ ")
-        script += " \\end{bmatrix}"
-
-        return script
+        return newMatrix
     
-    def LUdecomp(self):
-        L = Matrix.identity(self.size)
-        U = Matrix.identity(self.size)
+    def lu(self, method: str):
 
-        for k in range(1, self.iterSize):
-            L.mat[k][k] = 1
-
-            for j in range(k, self.iterSize):
-                sum = 0
-
-                for s in range(k):
-                    sum += L.mat[k][s] * U.mat[s][j]
-
-                U.mat[k][j] = self.mat[k][j] - sum
+        if method == "gauss":
+            U = copy.deepcopy(self)
+            L = Matrix.identity(self.size)
             
-            for i in range(k+1, self.iterSize):
-                sum = 0
+            for i in range(1, U.iterSize-1):
+                for j in range(i+1, U.iterSize):
+                    m = - U.mat[j][i] / U.mat[i][i]
+                    U = U.rowAdd(i, m, j)
+                    L = L.rowAdd(i, m, j)
 
-                for s in range(k):
-                    sum += L.mat[i][s] * U.mat[s][k]
+            return (L, U)
+        
+        elif method == "doolittle":
+            L = Matrix.identity(self.size)
+            U = Matrix.identity(self.size)
+
+            for k in range(1, self.iterSize):
+                L.mat[k][k] = 1
+
+                for j in range(k, self.iterSize):
+                    sum = 0
+
+                    for s in range(k):
+                        sum += L.mat[k][s] * U.mat[s][j]
+
+                    U.mat[k][j] = self.mat[k][j] - sum
                 
-                L.mat[i][k] = (self.mat[i][k] - sum) / U.mat[k][k]
+                for i in range(k+1, self.iterSize):
+                    sum = 0
 
-        return (L, U)
+                    for s in range(k):
+                        sum += L.mat[i][s] * U.mat[s][k]
+                    
+                    L.mat[i][k] = (self.mat[i][k] - sum) / U.mat[k][k]
+
+            return (L, U)
+    
+    def plu(self):
+        A = copy.deepcopy(self)
+        P = Matrix.identity(A.size)
+
+        for i in range(1, A.iterSize):
+
+            if A.mat[i][i] == 0:
+                for j in range(i, A.iterSize):
+                    if A.mat[j][i] != 0:
+                        A.rowSwitch(i, j)
+                        P.rowSwitch(i, j)
+                        break
+        
+        L, U = A.lu("doolittle")
+
+        return (P, L, U)
+
+
 
 if __name__ == "__main__":
     a = Matrix(3)
