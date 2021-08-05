@@ -8,26 +8,25 @@ from fractions import Fraction
 class Matrix:
     def __init__(self, size: int, array):
         self.size = size
-        self.iterSize = self.size + 1
         self.mat = [[Fraction(0) for col in range(self.size+1)] for row in range(self.size+1)]
 
         if isinstance(array[0], list):
-            for i in range(1, self.iterSize):
-                for j in range(1, self.iterSize):
+            for i in range(1, self.size+1):
+                for j in range(1, self.size+1):
                     self.mat[i][j] = Fraction(array[i][j])
 
         else:
             m = 0
-            for i in range(1, self.iterSize):
-                for j in range(1, self.iterSize):
+            for i in range(1, self.size+1):
+                for j in range(1, self.size+1):
                     self.mat[j][i] = Fraction(array[m])
                     m += 1
 
     def __str__(self):
         list = [[Fraction(0) for col in range(self.size)] for row in range(self.size)]
 
-        for i in range(1, self.iterSize):
-            for j in range(1, self.iterSize):
+        for i in range(1, self.size+1):
+            for j in range(1, self.size+1):
                 list[i-1][j-1] = self.mat[i][j]
         return str(list)
     
@@ -35,8 +34,8 @@ class Matrix:
         # use "from IPython.display import Math" code: Math(MatObject.scriptMath())
         script = "\\begin{bmatrix} "
 
-        for i in range(1, self.iterSize):
-            for j in range(1, self.iterSize):
+        for i in range(1, self.size+1):
+            for j in range(1, self.size+1):
                 script = script + str(self.mat[j][i]) + "&"
             script += "& "
         
@@ -66,8 +65,8 @@ class Matrix:
     def __add__(self, other):
         newMatrix = copy.deepcopy(self)
 
-        for i in range(1, newMatrix.iterSize):
-            for j in range(1, newMatrix.iterSize):
+        for i in range(1, newMatrix.size+1):
+            for j in range(1, newMatrix.size+1):
                 newMatrix.mat[i][j] += other.mat[i][j]
         
         return newMatrix
@@ -75,8 +74,8 @@ class Matrix:
     def __sub__(self, other):
         newMatrix = copy.deepcopy(self)
 
-        for i in range(1, newMatrix.iterSize):
-            for j in range(1, newMatrix.iterSize):
+        for i in range(1, newMatrix.size+1):
+            for j in range(1, newMatrix.size+1):
                 newMatrix.mat[i][j] -= other.mat[i][j]
         
         return newMatrix
@@ -84,8 +83,8 @@ class Matrix:
     def __neg__(self):
         newMatrix = copy.deepcopy(self)
 
-        for i in range(1, newMatrix.iterSize):
-            for j in range(1, newMatrix.iterSize):
+        for i in range(1, newMatrix.size+1):
+            for j in range(1, newMatrix.size+1):
                 newMatrix.mat[i][j] = -newMatrix.mat[i][j]
         
         return newMatrix
@@ -94,10 +93,10 @@ class Matrix:
         if isinstance(other, Matrix):
             newMatrix = Matrix.identity(self.size)
 
-            for i in range(1, newMatrix.iterSize):
-                for j in range(1, newMatrix.iterSize):
+            for i in range(1, newMatrix.size+1):
+                for j in range(1, newMatrix.size+1):
                     newMatrix.mat[i][j] = 0
-                    for m in range(1, newMatrix.iterSize):
+                    for m in range(1, newMatrix.size+1):
                         newMatrix.mat[i][j] += self.mat[i][m] * other.mat[m][j]
 
             return newMatrix
@@ -105,8 +104,8 @@ class Matrix:
         elif isinstance(other, int):
             newMatrix = copy.deepcopy(self)
             
-            for i in range(1, newMatrix.iterSize):
-                for j in range(1, newMatrix.iterSize):
+            for i in range(1, newMatrix.size+1):
+                for j in range(1, newMatrix.size+1):
                     newMatrix.mat[i][j] *= other
             
             return newMatrix
@@ -172,18 +171,18 @@ class Matrix:
         A = copy.deepcopy(self)
         newMatrix = Matrix.identity(self.size)
 
-        for i in range(1, A.iterSize-1):
-            for j in range(i+1, A.iterSize):
+        for i in range(1, A.size):
+            for j in range(i+1, A.size+1):
                 m = - A.mat[j][i] / A.mat[i][i]
                 A = A.rowAdd(i, m, j)
                 newMatrix = newMatrix.rowAdd(i, m, j)
         
-        for i in range(1, A.iterSize):
+        for i in range(1, A.size+1):
             m = 1/ A.mat[i][i]
             A = A.rowMultifly(i, m)
             newMatrix = newMatrix.rowMultifly(i, m)
         
-        for i in range(2, A.iterSize):
+        for i in range(2, A.size+1):
             for j in range(1, i):
                 m = - A.mat[j][i] / A.mat[i][i]
                 A = A.rowAdd(i, m, j)
@@ -194,8 +193,8 @@ class Matrix:
     def t(self):
         newMatrix = Matrix.zero(self.size)
 
-        for i in range(1, newMatrix.iterSize):
-            for j in range(1, newMatrix.iterSize):
+        for i in range(1, newMatrix.size+1):
+            for j in range(1, newMatrix.size+1):
                 newMatrix.mat[i][j] = self.mat[j][i]
         
         return newMatrix
@@ -207,8 +206,8 @@ class Matrix:
             U = copy.deepcopy(self)
             L = Matrix.identity(self.size)
             
-            for i in range(1, U.iterSize-1):
-                for j in range(i+1, U.iterSize):
+            for i in range(1, U.size):
+                for j in range(i+1, U.size+1):
                     m = - U.mat[j][i] / U.mat[i][i]
                     U = U.rowAdd(i, m, j)
                     L = L.rowAdd(i, m, j)
@@ -219,10 +218,10 @@ class Matrix:
             L = Matrix.identity(self.size)
             U = Matrix.identity(self.size)
 
-            for k in range(1, self.iterSize):
+            for k in range(1, self.size+1):
                 L.mat[k][k] = 1
 
-                for j in range(k, self.iterSize):
+                for j in range(k, self.size+1):
                     sum = 0
 
                     for s in range(k):
@@ -230,7 +229,7 @@ class Matrix:
 
                     U.mat[k][j] = self.mat[k][j] - sum
                 
-                for i in range(k+1, self.iterSize):
+                for i in range(k+1, self.size+1):
                     sum = 0
 
                     for s in range(k):
@@ -244,10 +243,10 @@ class Matrix:
         A = copy.deepcopy(self)
         P = Matrix.identity(A.size)
 
-        for i in range(1, A.iterSize):
+        for i in range(1, A.size+1):
 
             if A.mat[i][i] == 0:
-                for j in range(i, A.iterSize):
+                for j in range(i, A.size+1):
                     if A.mat[j][i] != 0:
                         A.rowSwitch(i, j)
                         P.rowSwitch(i, j)
