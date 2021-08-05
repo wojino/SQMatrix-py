@@ -147,6 +147,29 @@ class Matrix:
 
         return newMatrix
 
+    def inv(self):
+        A = copy.deepcopy(self)
+        newMatrix = Matrix.identity(self.size)
+
+        for i in range(1, A.iterSize-1):
+            for j in range(i+1, A.iterSize):
+                m = - A.mat[j][i] / A.mat[i][i]
+                A = A.rowAdd(i, m, j)
+                newMatrix = newMatrix.rowAdd(i, m, j)
+        
+        for i in range(1, A.iterSize):
+            m = 1/ A.mat[i][i]
+            A = A.rowMultifly(i, m)
+            newMatrix = newMatrix.rowMultifly(i, m)
+        
+        for i in range(2, A.iterSize):
+            for j in range(1, i):
+                m = - A.mat[j][i] / A.mat[i][i]
+                A = A.rowAdd(i, m, j)
+                newMatrix = newMatrix.rowAdd(i, m, j)
+
+        return newMatrix
+    
     def scriptMath(self):
         # use "from IPython.display import Math" code: Math(MatObject.scriptMath())
         script = "\\begin{bmatrix} "
