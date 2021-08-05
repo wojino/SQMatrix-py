@@ -20,7 +20,7 @@ class Matrix:
             m = 0
             for i in range(1, self.iterSize):
                 for j in range(1, self.iterSize):
-                    self.mat[i][j] = Fraction(array[m])
+                    self.mat[j][i] = Fraction(array[m])
                     m += 1
 
     def __str__(self):
@@ -31,7 +31,7 @@ class Matrix:
                 list[i-1][j-1] = self.mat[i][j]
         return str(list)
     
-    def show(self):
+    def script(self):
         # use "from IPython.display import Math" code: Math(MatObject.scriptMath())
         script = "\\begin{bmatrix} "
 
@@ -125,6 +125,7 @@ class Matrix:
 
     def __ne__(self, other):
         return self.mat != other.mat
+
     # Elementary row operation
     def rowSwitch(self, i, j):
         # Row switching transformation: switches all matrix elements on row i with their counterparts on row j.
@@ -199,6 +200,7 @@ class Matrix:
         
         return newMatrix
     
+    # decompositions
     def lu(self, method: str):
 
         if method == "gauss":
