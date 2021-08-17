@@ -13,13 +13,13 @@ class Matrix:
         if isinstance(array[0], list):
             for i in range(1, self.size+1):
                 for j in range(1, self.size+1):
-                    self.mat[i][j] = Fraction(array[i][j])
+                    self.mat[i][j] = Fraction(array[i-1][j-1])
 
         else:
             m = 0
             for i in range(1, self.size+1):
                 for j in range(1, self.size+1):
-                    self.mat[j][i] = Fraction(array[m])
+                    self.mat[i][j] = Fraction(array[m])
                     m += 1
 
     def __str__(self):
@@ -46,9 +46,9 @@ class Matrix:
         return script
 
     def identity(size: int):
-        array = [[0 for col in range(size+1)] for row in range(size+1)]
+        array = [[0 for col in range(size)] for row in range(size)]
 
-        for i in range(1, size+1):
+        for i in range(0, size):
             array[i][i] = 1
         
         return Matrix(size, array)
@@ -57,7 +57,7 @@ class Matrix:
         return Matrix.identity(size)
         
     def zero(size: int):
-        array = [[0 for col in range(size+1)] for row in range(size+1)]
+        array = [[0 for col in range(size)] for row in range(size)]
 
         return Matrix(size, array)
 
@@ -204,13 +204,16 @@ class Matrix:
 
         if method == "gauss":
             U = copy.deepcopy(self)
-            L = Matrix.identity(self.size)
+            E = Matrix.identity(self.size)
             
             for i in range(1, U.size):
                 for j in range(i+1, U.size+1):
+
                     m = - U.mat[j][i] / U.mat[i][i]
                     U = U.rowAdd(i, m, j)
-                    L = L.rowAdd(i, m, j)
+                    E = E.rowAdd(i, m, j)
+
+            L = E.inv()
 
             return (L, U)
         
