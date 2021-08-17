@@ -200,7 +200,7 @@ class Matrix:
         return newMatrix
     
     # decompositions
-    def lu(self, method: str):
+    def lu(self, method="doolittle"):
 
         if method == "gauss":
             U = copy.deepcopy(self)
@@ -215,7 +215,7 @@ class Matrix:
 
             L = E.inv()
 
-            return (L, U)
+            return L, U
         
         elif method == "doolittle":
             L = Matrix.identity(self.size)
@@ -240,7 +240,7 @@ class Matrix:
                     
                     L.mat[i][k] = (self.mat[i][k] - sum) / U.mat[k][k]
 
-            return (L, U)
+            return L, U
     
     def plu(self):
         A = copy.deepcopy(self)
