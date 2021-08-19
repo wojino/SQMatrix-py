@@ -3,6 +3,7 @@
 
 import copy
 from fractions import Fraction
+import math
 
 
 class Matrix:
@@ -259,8 +260,69 @@ class Matrix:
 
         return (P, L, U)
 
+    def ldlt(self):
+        A = copy.deepcopy(self)
+        L = Matrix.identity(A.size)
+        D = Matrix.zero(A.size)
+
+        for j in range(1, A.size+1):
+
+            sum = 0
+            for v in range(1, j):
+                sum += D.mat[v][v] * math.pow(L.mat[j][v], 2)
+            
+            D.mat[j][j] = A.mat[j][j] - sum
+
+            for i in range(j+1, A.size+1):
+                L.mat[j][i] = 0
+
+                sum = 0
+                for v in range(1, j):
+                    sum += L.mat[i][v] * D.mat[v][v] * L.mat[j][v]
+
+                L.mat[i][j] = (A.mat[i][j] - sum) / D.mat[j][j]
+
+        return (L, D)
+
+    def cholesky(self):
+        A = copy.deepcopy(self)
+        L = Matrix.zero(A.size)
+
+        for k in range(1, A.size+1):
+
+            sum = 0
+            for s in range(1, k):
+                sum += math.pow(L.mat[k][s], 2)
+
+            L.mat[k][k] = Fraction(math.sqrt(A.mat[k][k] - sum))
+            
+            for i in range(k+1, A.size+1):
+
+                sum = 0
+                for s in range(1, k):
+                    sum += L.mat[i][s] * L.mat[k][s] 
+                
+                L.mat[i][k] = (A.mat[i][k] - sum) / L.mat[k][k]
+
+        return L
+
 
 
 if __name__ == "__main__":
-    a = Matrix(3)
-    a.scriptMath()
+    A = Matrix(3, [8, 2, 9, 4, 9, 4, 6, 7, 9])
+    L, U = A.lu()
+    print(f"LU decomposition input  A: {A}")
+    print(f"LU decomposition result L: {L}")
+    print(f"LU decomposition result U: {U}")
+
+    A = Matrix(3, [4, 12, -16, 12, 37, -43, -16, -43, 98])
+    L, D = A.ldlt()
+    print(f"LDLT decomposition input  A: {A}")
+    print(f"LDLT decomposition result L: {L}")
+    print(f"LDLT decomposition result D: {D}")
+
+
+    A = Matrix(3, [4, 12, -16, 12, 37, -43, -16, -43, 98])
+    L = A.cholesky()
+    print(f"Cholesky decomposition input  A: {A}")
+    print(f"Cholesky decomposition result L: {L}")
