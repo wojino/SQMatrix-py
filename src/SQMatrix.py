@@ -98,7 +98,7 @@ class Matrix:
                 for j in range(1, newMatrix.size+1):
                     newMatrix.mat[i][j] = 0
                     for m in range(1, newMatrix.size+1):
-                        newMatrix.mat[i][j] += self.mat[i][m] * other.mat[m][j]
+                        newMatrix.mat[i][j] += self.mat[m][i] * other.mat[j][m]
 
             return newMatrix
 
