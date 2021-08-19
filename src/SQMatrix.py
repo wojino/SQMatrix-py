@@ -92,13 +92,12 @@ class Matrix:
 
     def __mul__(self, other):
         if isinstance(other, Matrix):
-            newMatrix = Matrix.identity(self.size)
+            newMatrix = Matrix.zero(self.size)
 
             for i in range(1, newMatrix.size+1):
                 for j in range(1, newMatrix.size+1):
-                    newMatrix.mat[i][j] = 0
                     for m in range(1, newMatrix.size+1):
-                        newMatrix.mat[i][j] += self.mat[m][i] * other.mat[j][m]
+                        newMatrix.mat[i][j] += self.mat[i][m] * other.mat[m][j]
 
             return newMatrix
 
@@ -306,6 +305,8 @@ class Matrix:
 
         return L
 
+    def linearEqSolve(self, other, method: str):
+        pass
 
 
 if __name__ == "__main__":
@@ -314,7 +315,9 @@ if __name__ == "__main__":
     print(f"LU decomposition input  A: {A}")
     print(f"LU decomposition result L: {L}")
     print(f"LU decomposition result U: {U}")
+    print(f"LU decomposition result L*U: {L*U}")
 
+    '''
     A = Matrix(3, [4, 12, -16, 12, 37, -43, -16, -43, 98])
     L, D = A.ldlt()
     print(f"LDLT decomposition input  A: {A}")
@@ -326,3 +329,4 @@ if __name__ == "__main__":
     L = A.cholesky()
     print(f"Cholesky decomposition input  A: {A}")
     print(f"Cholesky decomposition result L: {L}")
+    '''
