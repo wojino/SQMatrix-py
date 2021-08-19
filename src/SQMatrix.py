@@ -37,7 +37,7 @@ class Matrix:
 
         for i in range(1, self.size+1):
             for j in range(1, self.size+1):
-                script = script + str(self.mat[j][i]) + "&"
+                script = script + str(self.mat[i][j]) + "&"
             script += "& "
         
         script = script.replace("&&", "\\\\")
@@ -316,6 +316,7 @@ if __name__ == "__main__":
     print(f"LU decomposition result L: {L}")
     print(f"LU decomposition result U: {U}")
     print(f"LU decomposition result L*U: {L*U}")
+    print(A.script())
 
     '''
     A = Matrix(3, [4, 12, -16, 12, 37, -43, -16, -43, 98])
