@@ -225,7 +225,7 @@ class Matrix:
                 L.mat[k][k] = 1
 
                 for j in range(k, self.size+1):
-                    sum = 0
+                    sum = Fraction(0)
 
                     for s in range(k):
                         sum += L.mat[k][s] * U.mat[s][j]
@@ -266,7 +266,7 @@ class Matrix:
 
         for j in range(1, A.size+1):
 
-            sum = 0
+            sum = Fraction(0)
             for v in range(1, j):
                 sum += D.mat[v][v] * math.pow(L.mat[j][v], 2)
             
@@ -289,7 +289,7 @@ class Matrix:
 
         for k in range(1, A.size+1):
 
-            sum = 0
+            sum = Fraction(0)
             for s in range(1, k):
                 sum += math.pow(L.mat[k][s], 2)
 
