@@ -275,7 +275,7 @@ class Matrix:
             for i in range(j+1, A.size+1):
                 L.mat[j][i] = 0
 
-                sum = 0
+                sum = Fraction(0)
                 for v in range(1, j):
                     sum += L.mat[i][v] * D.mat[v][v] * L.mat[j][v]
 
@@ -297,7 +297,7 @@ class Matrix:
             
             for i in range(k+1, A.size+1):
 
-                sum = 0
+                sum = Fraction(0)
                 for s in range(1, k):
                     sum += L.mat[i][s] * L.mat[k][s] 
                 
@@ -310,7 +310,7 @@ class Matrix:
 
 
 if __name__ == "__main__":
-    '''
+    
     A = Matrix(3, [8, 2, 9, 4, 9, 4, 6, 7, 9])
     L, U = A.lu()
     print(f"LU decomposition input  A: {A}")
@@ -330,7 +330,6 @@ if __name__ == "__main__":
     L = A.cholesky()
     print(f"Cholesky decomposition input  A: {A}")
     print(f"Cholesky decomposition result L: {L}")
-    '''
 
     A = Matrix(3, [0, 12, -16, 12, 37, -43, -16, -43, 98])
     P, L, U = A.plu()
