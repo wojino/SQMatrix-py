@@ -268,7 +268,7 @@ class Matrix:
 
             sum = Fraction(0)
             for v in range(1, j):
-                sum += D.mat[v][v] * math.pow(L.mat[j][v], 2)
+                sum += Fraction(D.mat[v][v] * math.pow(L.mat[j][v], 2))
             
             D.mat[j][j] = A.mat[j][j] - sum
 
@@ -291,7 +291,7 @@ class Matrix:
 
             sum = Fraction(0)
             for s in range(1, k):
-                sum += math.pow(L.mat[k][s], 2)
+                sum += Fraction(math.pow(L.mat[k][s], 2))
 
             L.mat[k][k] = Fraction(math.sqrt(A.mat[k][k] - sum))
             
