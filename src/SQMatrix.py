@@ -251,11 +251,11 @@ class Matrix:
             if A.mat[i][i] == 0:
                 for j in range(i, A.size+1):
                     if A.mat[j][i] != 0:
-                        A.rowSwitch(i, j)
-                        P.rowSwitch(i, j)
+                        A = A.rowSwitch(i, j)
+                        P = P.rowSwitch(i, j)
                         break
         
-        L, U = A.lu("doolittle")
+        L, U = A.lu()
 
         return (P, L, U)
 
@@ -310,6 +310,7 @@ class Matrix:
 
 
 if __name__ == "__main__":
+    '''
     A = Matrix(3, [8, 2, 9, 4, 9, 4, 6, 7, 9])
     L, U = A.lu()
     print(f"LU decomposition input  A: {A}")
@@ -318,7 +319,6 @@ if __name__ == "__main__":
     print(f"LU decomposition result L*U: {L*U}")
     print(A.script())
 
-    '''
     A = Matrix(3, [4, 12, -16, 12, 37, -43, -16, -43, 98])
     L, D = A.ldlt()
     print(f"LDLT decomposition input  A: {A}")
@@ -331,3 +331,6 @@ if __name__ == "__main__":
     print(f"Cholesky decomposition input  A: {A}")
     print(f"Cholesky decomposition result L: {L}")
     '''
+
+    A = Matrix(3, [0, 12, -16, 12, 37, -43, -16, -43, 98])
+    P, L, U = A.plu()
